@@ -48,6 +48,6 @@
     <!--
         Requires a minimum platform version of Android-3 (SDK 1.5) to run
     -->
-    <uses-sdk android:minSdkVersion="3"/>
+    <uses-sdk android:minSdkVersion="8"/>
 
 </manifest>
