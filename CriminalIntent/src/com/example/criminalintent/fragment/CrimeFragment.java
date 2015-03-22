@@ -1,7 +1,9 @@
 package com.example.criminalintent.fragment;
 
-import android.app.Fragment;
+import java.util.UUID;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,18 +17,32 @@ import android.widget.EditText;
 
 import com.example.criminalintent.R;
 import com.example.criminalintent.model.Crime;
+import com.example.criminalintent.model.CrimeLab;
 
 public class CrimeFragment extends Fragment {
 	
+	public static final String EXTRA_CRIME_ID = CrimeFragment.class.getName() + "crime_id";
+
 	private Crime crime;
 	private EditText titleField;
 	private Button dateButton;
 	private CheckBox solvedCheckBox;
 	
+	public static CrimeFragment newInstance(UUID crimeId) {
+		Bundle args = new Bundle();
+		args.putSerializable(EXTRA_CRIME_ID, crimeId);
+		
+		CrimeFragment fragment = new CrimeFragment();
+		fragment.setArguments(args);
+		
+		return fragment;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.crime = new Crime();
+		UUID crimeId = (UUID)getArguments().getSerializable(EXTRA_CRIME_ID);
+		this.crime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
 	}
 	
 	@Override
@@ -40,6 +56,7 @@ public class CrimeFragment extends Fragment {
 	
 	private void initTitleField(View v) {
 		this.titleField = (EditText)v.findViewById(R.id.fargment_crime_crime_title);
+		this.titleField.setText(this.crime.getTitle());
 		this.titleField.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -70,6 +87,7 @@ public class CrimeFragment extends Fragment {
 	
 	private void initSolvedCheckBox(View v) {
 		this.solvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
+		this.solvedCheckBox.setChecked(this.crime.isSolved());
 		this.solvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override

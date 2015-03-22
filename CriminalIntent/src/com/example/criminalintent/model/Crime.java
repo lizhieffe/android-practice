@@ -43,4 +43,8 @@ public class Crime {
 	public void setSolved(boolean solved) {
 		this.solved = solved;
 	}
+	
+	public String toString() {
+		return this.title;
+	}
 }
