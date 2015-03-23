@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,8 +22,9 @@ import com.example.criminalintent.model.CrimeLab;
 
 public class CrimeFragment extends Fragment {
 	
-	public static final String EXTRA_CRIME_ID = CrimeFragment.class.getName() + "crime_id";
-
+	public static final String EXTRA_CRIME_ID = CrimeFragment.class.getName() + ".crime_id";
+	private static final String DIALOG_DATE = CrimeFragment.class.getName() + ".dialog_date";
+	
 	private Crime crime;
 	private EditText titleField;
 	private Button dateButton;
@@ -82,7 +84,15 @@ public class CrimeFragment extends Fragment {
 	private void initDateButton(View v) {
 		this.dateButton = (Button)v.findViewById(R.id.crime_date);
 		this.dateButton.setText(this.crime.getDate().toString());
-		this.dateButton.setEnabled(false);
+		this.dateButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+				DatePickerFragment dialog = DatePickerFragment.newInstance(crime.getDate());
+				dialog.show(fm, DIALOG_DATE);
+			}
+		});
 	}
 	
 	private void initSolvedCheckBox(View v) {
